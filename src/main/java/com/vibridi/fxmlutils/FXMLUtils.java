@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.Alert;
@@ -28,11 +29,19 @@ public class FXMLUtils {
 	 * @return Instance of <code>FXMLBuilder</code>
 	 */
 	public static FXMLBuilder newView(String fxml, Class<?> clazz) {
-		return new FXMLBuilder(fxml, clazz);
+		return newView(clazz.getResource(fxml));
 	}
 	
 	public static FXMLBuilder newView(URL url) {
 		return new FXMLBuilder(url);
+	}
+	
+	public static FXMLStackedBuilder newStackedView(String fxml, Class<?> clazz) {
+		return newStackedView(clazz.getResource(fxml));
+	}
+	
+	public static FXMLStackedBuilder newStackedView(URL url) {
+		return new FXMLStackedBuilder(url);
 	}
 	
 	public static Alert errorAlert(String message) {
@@ -89,13 +98,12 @@ public class FXMLUtils {
 		Clipboard.getSystemClipboard().setContent(content);
 	}
 	
-	public static File browse(Stage owner, String... extensions) {
-		FileChooser fc = new FileChooser();
-		fc.setTitle("Open document attachment");
-		fc.getExtensionFilters().addAll(Arrays.stream(extensions)
-				.map(s -> { return new ExtensionFilter(s.toUpperCase()+" files", "*."+s); })
-				.collect(Collectors.toList()));
-		return fc.showOpenDialog(owner);
+	public static File fromFileSystem(Stage owner, String... extensions) {
+		return createFileChooser(extensions).showOpenDialog(owner);
+	}
+	
+	public static List<File> fromFileSystemMultiple(Stage owner, String... extensions) {
+		return createFileChooser(extensions).showOpenMultipleDialog(owner);
 	}
 	
 	
@@ -124,6 +132,15 @@ public class FXMLUtils {
 		expContent.add(textArea, 0, 1);
 
 		return expContent;
+	}
+	
+	private static FileChooser createFileChooser(String... extensions) {
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Choose file(s)");
+		fc.getExtensionFilters().addAll(Arrays.stream(extensions)
+				.map(s -> { return new ExtensionFilter(s.toUpperCase()+" files", "*."+s); })
+				.collect(Collectors.toList()));
+		return fc;
 	}
 
 	

@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
-import com.vibridi.fxmlutils.api.ViewEventListener;
+import com.vibridi.fxmlutils.functional.ViewEventCallback;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -18,15 +18,15 @@ public abstract class BaseController {
 	private MultiMap listeners;
 		
 	public BaseController() {
-		listeners = MultiValueMap.decorate(new HashMap<String,ViewEventListener>());
+		listeners = MultiValueMap.decorate(new HashMap<String,ViewEventCallback>());
 	}
 	
 	/**
 	 * 
-	 * @param listenerTriggerClazz Class of the object that will be passed to <code>ViewEventListener.processEvent</code>
-	 * @param listener Listener object or lambda expression
+	 * @param listenerTriggerClazz Class of the object that will be passed to <code>ViewEventCallback.processEvent</code>
+	 * @param listener Callback object or lambda expression
 	 */
-	public void addListener(Class<?> listenerTriggerClazz, ViewEventListener listener) {
+	public void addCallback(Class<?> listenerTriggerClazz, ViewEventCallback listener) {
 		listeners.put(listenerTriggerClazz.getName(), listener);
 	}
 	
@@ -36,7 +36,7 @@ public abstract class BaseController {
 	
 	@SuppressWarnings("unchecked")
 	protected void fireEvent(Object payload) {
-		for(ViewEventListener lsn : (List<ViewEventListener>) listeners.get(payload.getClass().getName()))
+		for(ViewEventCallback lsn : (List<ViewEventCallback>) listeners.get(payload.getClass().getName()))
 			lsn.processEvent(payload);
 	}
 	
