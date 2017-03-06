@@ -1,8 +1,11 @@
 package com.vibridi.fxmlutils;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,6 +15,9 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class FXMLUtils {
 	
@@ -77,6 +83,22 @@ public class FXMLUtils {
 		return alert;
 	}
 	
+	public static void copyToClipboard(String text) {
+		ClipboardContent content = new ClipboardContent();
+		content.putString(text);
+		Clipboard.getSystemClipboard().setContent(content);
+	}
+	
+	public static File browse(Stage owner, String... extensions) {
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Open document attachment");
+		fc.getExtensionFilters().addAll(Arrays.stream(extensions)
+				.map(s -> { return new ExtensionFilter(s.toUpperCase()+" files", "*."+s); })
+				.collect(Collectors.toList()));
+		return fc.showOpenDialog(owner);
+	}
+	
+	
 	private static GridPane createExpandableContent(Throwable t) {
 		StringWriter sw = new StringWriter();
 		t.printStackTrace(new PrintWriter(sw));
@@ -103,12 +125,6 @@ public class FXMLUtils {
 
 		return expContent;
 	}
-	
-	
-	public static void copyToClipboard(String text) {
-		ClipboardContent content = new ClipboardContent();
-		content.putString(text);
-		Clipboard.getSystemClipboard().setContent(content);
-	}
+
 	
 }
