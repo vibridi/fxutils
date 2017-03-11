@@ -3,7 +3,8 @@ package com.vibridi.fxmlutils;
 import java.io.IOException;
 import java.net.URL;
 
-import com.vibridi.fxmlutils.FXMLBuilder.FXMLBuilder1;
+import com.vibridi.fxmlutils.api.IFXMLBuilder;
+import com.vibridi.fxmlutils.api.IFXMLBuilder1;
 import com.vibridi.fxmlutils.controller.BaseStackController;
 import com.vibridi.fxmlutils.controller.BaseStackPageController;
 import com.vibridi.fxmlutils.exception.FXMLException;
@@ -11,6 +12,8 @@ import com.vibridi.fxmlutils.functional.ViewEventCallback;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -18,19 +21,47 @@ public class FXMLStackedBuilder {
 
 	private Stage stage;
 	private Node node;
-	private FXMLBuilder builder;
-	private FXMLBuilder1 builder1;
+	private IFXMLBuilder builder;
+	private IFXMLBuilder1 builder1;
 	
-	public FXMLStackedBuilder(URL url) {
+	private final boolean isSimple;
+	
+	protected FXMLStackedBuilder(URL url) {
 		builder = new FXMLBuilder(url);
+		isSimple = false;
+		
 	}
 	
-	public FXMLStackedBuilder1 makeStage(String title) {
-		builder1 = builder.makeStage(title);
-		return new FXMLStackedBuilder1();
+	protected FXMLStackedBuilder() {
+		isSimple = true;
 	}
 	
-	public class FXMLStackedBuilder1 {
+	/**
+	 * Stage 0: builds a stacked pane view from its own .fxml descriptor 
+	 */
+	public FXMLStackedBuilder1Adapter makeStage(String title) {
+		if(isSimple) {
+			stage = new Stage();
+			stage.setTitle(title);
+			stage.setScene(new Scene(new BorderPane()));
+			stage.setUserData(new BaseStackController() {
+				
+			});
+			return new FXMLSimpleStackedBuilder1();
+		} else {
+			builder1 = builder.makeStage(title);
+			return new FXMLStackedBuilder1();
+		}
+	}
+	
+	public interface FXMLStackedBuilder1Adapter {
+		public FXMLStackedBuilder2 buildStack();
+	}
+	
+	/**
+	 * Stage 1: builds callbacks and modality onto the stack controller
+	 */
+	public class FXMLStackedBuilder1 implements FXMLStackedBuilder1Adapter {
 		public FXMLStackedBuilder1 addCallback(Class<?> triggerClazz, ViewEventCallback callback) {
 			builder1 = builder1.addCallback(triggerClazz, callback);
 			return this;
@@ -41,13 +72,28 @@ public class FXMLStackedBuilder {
 			return this;
 		}
 		
+		@Override
 		public FXMLStackedBuilder2 buildStack() {
 			stage = builder1.build();
 			return new FXMLStackedBuilder2();
 		}
 	}
 	
+	public class FXMLSimpleStackedBuilder1 implements FXMLStackedBuilder1Adapter {
+
+		@Override
+		public FXMLStackedBuilder2 buildStack() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Stage 2: builds child pages onto the stacked pane 
+	 */
 	public class FXMLStackedBuilder2 {
+		
 		public FXMLStackedBuilder3 makePage(String fxml, Class<?> clazz) {
 			return makePage(clazz.getResource(fxml));
 		}

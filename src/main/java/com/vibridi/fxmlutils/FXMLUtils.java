@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.vibridi.fxmlutils.FXMLStackedBuilder.FXMLStackedBuilder2;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -42,6 +44,10 @@ public class FXMLUtils {
 	
 	public static FXMLStackedBuilder newStackedView(URL url) {
 		return new FXMLStackedBuilder(url);
+	}
+	
+	public static void newSimpleStackedView() {
+		new FXMLStackedBuilder().new FXMLStackedBuilder2();
 	}
 	
 	public static Alert errorAlert(String message) {
