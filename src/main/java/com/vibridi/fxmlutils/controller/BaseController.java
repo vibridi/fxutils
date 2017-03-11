@@ -15,10 +15,11 @@ import javafx.stage.Stage;
 
 public abstract class BaseController {
 	
+	protected Stage stage;
 	private MultiMap listeners;
 		
-	public BaseController() {
-		listeners = MultiValueMap.decorate(new HashMap<String,ViewEventCallback>());
+	public <T> BaseController() {
+		listeners = MultiValueMap.decorate(new HashMap<String,ViewEventCallback<T>>());
 	}
 	
 	/**
@@ -26,8 +27,12 @@ public abstract class BaseController {
 	 * @param listenerTriggerClazz Class of the object that will be passed to <code>ViewEventCallback.processEvent</code>
 	 * @param listener Callback object or lambda expression
 	 */
-	public void addCallback(Class<?> listenerTriggerClazz, ViewEventCallback listener) {
+	public <T> void addCallback(Class<T> listenerTriggerClazz, ViewEventCallback<T> listener) {
 		listeners.put(listenerTriggerClazz.getName(), listener);
+	}
+	
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 	
 	protected void setTooltip(Node fxnode, String tip) {
@@ -35,8 +40,8 @@ public abstract class BaseController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void fireEvent(Object payload) {
-		for(ViewEventCallback lsn : (List<ViewEventCallback>) listeners.get(payload.getClass().getName()))
+	protected <T> void fireEvent(T payload) {
+		for(ViewEventCallback<T> lsn : (List<ViewEventCallback<T>>) listeners.get(payload.getClass().getName()))
 			lsn.processEvent(payload);
 	}
 	

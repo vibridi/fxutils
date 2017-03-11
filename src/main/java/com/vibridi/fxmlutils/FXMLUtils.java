@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.vibridi.fxmlutils.FXMLStackedBuilder.FXMLStackedBuilder2;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -18,36 +16,25 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class FXMLUtils {
-	
+
 	/**
-	 * 
+	 * 	 
+	 * @param clazz Class relative to which the <code>.fxml</code> file is found
 	 * @param fxml Path to the <code>.fxml</code> file
-	 * @param clazz Class which the path of the <code>.fxml</code> file is relative to.
 	 * @return Instance of <code>FXMLBuilder</code>
 	 */
-	public static FXMLBuilder newView(String fxml, Class<?> clazz) {
+	public static FXMLBuilder newView(Class<?> clazz, String fxml) {		
 		return newView(clazz.getResource(fxml));
 	}
 	
 	public static FXMLBuilder newView(URL url) {
 		return new FXMLBuilder(url);
-	}
-	
-	public static FXMLStackedBuilder newStackedView(String fxml, Class<?> clazz) {
-		return newStackedView(clazz.getResource(fxml));
-	}
-	
-	public static FXMLStackedBuilder newStackedView(URL url) {
-		return new FXMLStackedBuilder(url);
-	}
-	
-	public static void newSimpleStackedView() {
-		new FXMLStackedBuilder().new FXMLStackedBuilder2();
 	}
 	
 	public static Alert errorAlert(String message) {
@@ -56,6 +43,10 @@ public class FXMLUtils {
 	
 	public static Alert errorAlert(String header, String message) {
 		return errorAlert(header, message, null);
+	}
+	
+	public static Alert errorAlert(String message, Throwable t) {
+		return errorAlert(null, message, t);
 	}
 	
 	public static Alert errorAlert(String header, String message, Throwable t) {
@@ -74,6 +65,10 @@ public class FXMLUtils {
 	
 	public static Alert warningAlert(String header, String message) {
 		return warningAlert(header, message, null);
+	}
+	
+	public static Alert warningAlert(String message, Throwable t) {
+		return warningAlert(null, message, t);
 	}
 	
 	public static Alert warningAlert(String header, String message, Throwable t) {
@@ -104,14 +99,29 @@ public class FXMLUtils {
 		Clipboard.getSystemClipboard().setContent(content);
 	}
 	
+	/**
+	 * 
+	 * @param owner The node owner of the search dialog
+	 * @param extensions File extensions filters. Do not prepend '.' to the extension.
+	 * @return
+	 */
 	public static File fromFileSystem(Stage owner, String... extensions) {
 		return createFileChooser(extensions).showOpenDialog(owner);
 	}
 	
+	/**
+	 * 
+	 * @param owner The node owner of the search dialog
+	 * @param extensions File extensions filters. Do not prepend '.' to the extension.
+	 * @return
+	 */
 	public static List<File> fromFileSystemMultiple(Stage owner, String... extensions) {
 		return createFileChooser(extensions).showOpenMultipleDialog(owner);
 	}
 	
+	public static void turnPage(StackPane stack) {
+		stack.getChildren().get(stack.getChildren().size() - 1).toBack();
+	}
 	
 	private static GridPane createExpandableContent(Throwable t) {
 		StringWriter sw = new StringWriter();
