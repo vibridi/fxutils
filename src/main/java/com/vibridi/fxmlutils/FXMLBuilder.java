@@ -11,11 +11,13 @@ import com.vibridi.fxmlutils.controller.BaseController;
 import com.vibridi.fxmlutils.exception.FXMLException;
 import com.vibridi.fxmlutils.functional.ViewEventCallback;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class FXMLBuilder implements IFXMLBuilder {
 	
@@ -51,10 +53,11 @@ public class FXMLBuilder implements IFXMLBuilder {
 		private Stage stage;
 		
 		protected FXMLBuilder1(Stage stage) {
+			this.stage = stage;
+			
 			Object ctrl = loader.getController();
 			if(ctrl instanceof BaseController)
-				((BaseController) ctrl).setStage(stage);
-			this.stage = stage;
+				((BaseController) ctrl).setStage(this.stage);
 		}
 		
 		@Override
