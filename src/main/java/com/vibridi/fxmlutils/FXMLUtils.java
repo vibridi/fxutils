@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -131,6 +133,17 @@ public class FXMLUtils {
 		return createFileChooser("Open files", extensions).showOpenMultipleDialog(owner);
 	}
 	
+	public static List<File> openDirectory(Stage owner) {
+		File dir = chooseDirectory(owner);
+		if(dir == null)
+			return null;
+		return Arrays.asList(dir.listFiles());		
+	}
+	
+	public static File chooseDirectory(Stage owner) {
+		return createDirectoryChooser("Open directory").showDialog(owner);
+	}
+	
 	public static void turnPage(StackPane stack) {
 		stack.getChildren().get(stack.getChildren().size() - 1).toBack();
 	}
@@ -187,6 +200,13 @@ public class FXMLUtils {
 				.map(s -> { return new ExtensionFilter(s.toUpperCase()+" files", "*."+s); })
 				.collect(Collectors.toList()));
 		return fc;
+	}
+	
+	private static DirectoryChooser createDirectoryChooser(String title) {
+		DirectoryChooser dc = new DirectoryChooser();
+		//dc.setInitialDirectory(new File(homeUri));
+		dc.setTitle(title);
+		return dc;
 	}
 
 	
