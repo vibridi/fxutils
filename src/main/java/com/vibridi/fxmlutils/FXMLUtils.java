@@ -1,19 +1,26 @@
 package com.vibridi.fxmlutils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -99,14 +106,9 @@ public class FXMLUtils {
 		Clipboard.getSystemClipboard().setContent(content);
 	}
 	
-	/**
-	 * 
-	 * @param owner The node owner of the search dialog
-	 * @param extensions File extensions filters. Do not prepend '.' to the extension.
-	 * @return
-	 */
-	public static File fromFileSystem(Stage owner, String... extensions) {
-		return createFileChooser(extensions).showOpenDialog(owner);
+	public static void saveFile(byte[] bytes, Stage owner, String... extensions) throws IOException {
+		File dest = createFileChooser("Save file", extensions).showSaveDialog(owner);
+		Files.write(Paths.get(dest.toURI()), bytes);
 	}
 	
 	/**
@@ -115,14 +117,42 @@ public class FXMLUtils {
 	 * @param extensions File extensions filters. Do not prepend '.' to the extension.
 	 * @return
 	 */
-	public static List<File> fromFileSystemMultiple(Stage owner, String... extensions) {
-		return createFileChooser(extensions).showOpenMultipleDialog(owner);
+	public static File openFile(Stage owner, String... extensions) {
+		return createFileChooser("Open file", extensions).showOpenDialog(owner);
+	}
+	
+	/**
+	 * 
+	 * @param owner The node owner of the search dialog
+	 * @param extensions File extensions filters. Do not prepend '.' to the extension.
+	 * @return
+	 */
+	public static List<File> openFiles(Stage owner, String... extensions) {
+		return createFileChooser("Open files", extensions).showOpenMultipleDialog(owner);
 	}
 	
 	public static void turnPage(StackPane stack) {
 		stack.getChildren().get(stack.getChildren().size() - 1).toBack();
 	}
 	
+	/**
+	 * Convenience setter for double-click events. The handler that you pass to this function doesn't have to 
+	 * explicitly check that the event is a double click. 
+	 * 
+	 * @param node
+	 * @param doubleClickHandler
+	 */
+	public static void setOnDoubleClick(Node node, EventHandler<? super MouseEvent> doubleClickHandler) {
+		node.setOnMouseClicked(event -> {
+			if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+				doubleClickHandler.handle(event);
+			}
+		});
+	}
+	
+	/* ***********************
+	 * PRIVATE METHODS
+	 * ***********************/
 	private static GridPane createExpandableContent(Throwable t) {
 		StringWriter sw = new StringWriter();
 		t.printStackTrace(new PrintWriter(sw));
@@ -150,9 +180,9 @@ public class FXMLUtils {
 		return expContent;
 	}
 	
-	private static FileChooser createFileChooser(String... extensions) {
+	private static FileChooser createFileChooser(String title, String... extensions) {
 		FileChooser fc = new FileChooser();
-		fc.setTitle("Choose file(s)");
+		fc.setTitle(title);
 		fc.getExtensionFilters().addAll(Arrays.stream(extensions)
 				.map(s -> { return new ExtensionFilter(s.toUpperCase()+" files", "*."+s); })
 				.collect(Collectors.toList()));

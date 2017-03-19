@@ -53,8 +53,7 @@ public class FXMLBuilder implements IFXMLBuilder {
 		private Stage stage;
 		
 		protected FXMLBuilder1(Stage stage) {
-			this.stage = stage;
-			
+			this.stage = stage;	
 			Object ctrl = loader.getController();
 			if(ctrl instanceof BaseController)
 				((BaseController) ctrl).setStage(this.stage);
