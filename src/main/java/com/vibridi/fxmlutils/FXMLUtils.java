@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,12 +13,19 @@ import java.util.stream.Collectors;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyCombination.Modifier;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -163,6 +169,49 @@ public class FXMLUtils {
 		});
 	}
 	
+	/**
+	 * Sets a mouse-over tooltip on the specified node.
+	 * 
+	 * @param node Node that has to show the tip
+	 * @param text Informative content of the tip
+	 */
+	public static void setTooltip(Node node, String text) {
+		Tooltip.install(node, new Tooltip(text));
+	}
+	
+	/**
+	 * Convenience method for setting key combination shortcuts.
+	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus letters or digits.
+	 * 
+	 * @param scene The node that will respond to the key combination
+	 * @param keyCombination A string in the format 'modifier[+modifier]+key'
+	 * @param keyHandler
+	 */
+	public static void setKeyCombinationShortcut(Node node, String keyCombination, EventHandler<? super KeyEvent> keyHandler) {
+		keyCombination = keyCombination.toLowerCase();
+		List<String> keys = Arrays.asList(keyCombination.split("\\+"));
+		if(keys.size() < 1)
+			throw new IllegalArgumentException("Key combination is empty");
+		
+		String stringCode = keys.get(keys.size() - 1);
+		KeyCode keyCode = asKeyCombinationMain(stringCode);
+		
+		List<Modifier> modifiers = keys.stream()
+				.limit(keys.size() - 1)
+				.distinct()
+				.map(FXMLUtils::asKeyCombinationModifier)
+				.collect(Collectors.toList());	
+		
+		final KeyCombination combo = new KeyCodeCombination(keyCode, modifiers.toArray(new Modifier[modifiers.size()]));
+		
+		node.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+			if(combo.match(event))
+				keyHandler.handle(event);
+		});
+		
+	}
+	
+	
 	/* ***********************
 	 * PRIVATE METHODS
 	 * ***********************/
@@ -207,6 +256,36 @@ public class FXMLUtils {
 		//dc.setInitialDirectory(new File(homeUri));
 		dc.setTitle(title);
 		return dc;
+	}
+	
+	private static KeyCode asKeyCombinationMain(String name) {
+		if(name == null || name.isEmpty())
+			throw new IllegalArgumentException("Key definition is null or empty");
+		
+		name = name.toUpperCase();
+		if(name.length() == 1) {
+			if(Character.isAlphabetic(name.charAt(0)))
+				return KeyCode.valueOf(name);
+			if(Character.isDigit(name.charAt(0)))
+				return KeyCode.valueOf("DIGIT" + name);
+//			switch(name.charAt(0)) {
+//			
+//			}
+		}
+		throw new IllegalArgumentException("Unknown or unsupported key");
+	}
+	
+	private static Modifier asKeyCombinationModifier(String name) {
+		switch(name.toUpperCase()) {
+		case "CTRL":
+		case "CMD":
+			return KeyCombination.SHORTCUT_DOWN;
+		case "ALT":
+			return KeyCombination.ALT_DOWN;
+		case "SHIFT":
+			return KeyCombination.SHIFT_DOWN;
+		}
+		throw new IllegalArgumentException("Unknown or unsupported key modifier");
 	}
 
 	
