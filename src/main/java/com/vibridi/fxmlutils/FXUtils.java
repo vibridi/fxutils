@@ -11,11 +11,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.vibridi.fxmlutils.functional.DialogCancellationCallback;
+import com.vibridi.fxmlutils.functional.DialogConfirmationCallback;
+
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
@@ -36,7 +40,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-public class FXMLUtils {
+public class FXUtils {
 
 	/**
 	 * 	 
@@ -44,12 +48,12 @@ public class FXMLUtils {
 	 * @param fxml Path to the <code>.fxml</code> file
 	 * @return Instance of <code>FXMLBuilder</code>
 	 */
-	public static FXMLBuilder newView(Class<?> clazz, String fxml) {		
+	public static FXBuilder newView(Class<?> clazz, String fxml) {		
 		return newView(clazz.getResource(fxml));
 	}
 	
-	public static FXMLBuilder newView(URL url) {
-		return new FXMLBuilder(url);
+	public static FXBuilder newView(URL url) {
+		return new FXBuilder(url);
 	}
 	
 	public static Alert errorAlert(String message) {
@@ -71,6 +75,7 @@ public class FXMLUtils {
 		alert.setContentText(message);
 		if(t != null)
 			alert.getDialogPane().setExpandableContent(createExpandableContent(t));
+		
 		return alert;
 	}
 	
@@ -93,6 +98,7 @@ public class FXMLUtils {
 		alert.setContentText(message);
 		if(t != null)
 			alert.getDialogPane().setExpandableContent(createExpandableContent(t));
+
 		return alert;
 	}
 	
@@ -105,6 +111,38 @@ public class FXMLUtils {
 		alert.setTitle("Info");
 		alert.setHeaderText(header);
 		alert.setContentText(message);
+		return alert;
+	}
+	
+	public static Alert binaryChoiceAlert(String message) {
+		return binaryChoiceAlert(null, message);
+	}
+	
+	public static Alert binaryChoiceAlert(String header, String message) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);	
+		alert.setTitle("Confirm action");
+		alert.setHeaderText(header);
+		alert.setContentText(message);
+		
+		ButtonType[] buttons = new ButtonType[] {
+			ButtonType.YES,
+			ButtonType.NO
+		};
+		
+		alert.getButtonTypes().setAll(buttons);
+		return alert;
+	}
+	
+	public static Alert multipleChoiceAlert(String message, ButtonType... buttons) {
+		return multipleChoiceAlert(null, message);
+	}
+	
+	public static Alert multipleChoiceAlert(String header, String message,ButtonType... buttons) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);	
+		alert.setTitle("Confirm action");
+		alert.setHeaderText(header);
+		alert.setContentText(message);
+		alert.getButtonTypes().setAll(buttons);
 		return alert;
 	}
 	
@@ -199,7 +237,7 @@ public class FXMLUtils {
 		List<Modifier> modifiers = keys.stream()
 				.limit(keys.size() - 1)
 				.distinct()
-				.map(FXMLUtils::asKeyCombinationModifier)
+				.map(FXUtils::asKeyCombinationModifier)
 				.collect(Collectors.toList());	
 		
 		final KeyCombination combo = new KeyCodeCombination(keyCode, modifiers.toArray(new Modifier[modifiers.size()]));

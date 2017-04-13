@@ -23,6 +23,28 @@ public abstract class BaseController {
 	}
 	
 	/**
+	 * This method is always called after <code>initialize()</code> to manage additional post-initialization logic.
+	 * The stage object is available here. If the implementor does not override this, then controller initialization is
+	 * limited to the <code>initialize()</code> called by the JavaFX framework. 
+	 * 
+	 */
+	public void setup() {
+		// do nothing by default 
+	}
+	
+	/**
+	 * Same as {@link BaseController#setup()} but allowing multiple arbitrary parameters.
+	 * The method in this base class makes no assumptions about parameter types. Implementor and caller must work in 
+	 * coordination to ensure type safety.
+	 * This method must be called explicitly by whomever instantiates the view.
+	 * 
+	 * @param parameters
+	 */
+	public void setupWith(Object... parameters) {
+		// do nothing by default 
+	}
+	
+	/**
 	 * 
 	 * @param listenerTriggerClazz Class of the object that will be passed to <code>ViewEventCallback.processEvent</code>
 	 * @param listener Callback object or lambda expression

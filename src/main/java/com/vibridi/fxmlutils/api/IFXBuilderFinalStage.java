@@ -1,5 +1,5 @@
 package com.vibridi.fxmlutils.api;
 
-public interface IFXMLBuilderFinalStage<T> {
+public interface IFXBuilderFinalStage<T> {
 	public T build();
 }

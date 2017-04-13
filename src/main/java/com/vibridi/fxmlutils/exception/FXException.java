@@ -1,13 +1,13 @@
 package com.vibridi.fxmlutils.exception;
 
-public class FXMLException extends RuntimeException {
+public class FXException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public FXMLException(String msg) {
+	public FXException(String msg) {
 		super(msg);
 	}
 	
-	public FXMLException(String msg, Exception e) {
+	public FXException(String msg, Exception e) {
 		super(msg, e);
 	}
 }
