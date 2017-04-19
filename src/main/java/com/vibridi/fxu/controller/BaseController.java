@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.controller;
+package com.vibridi.fxu.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 
-import com.vibridi.fxmlutils.functional.ViewEventCallback;
+import com.vibridi.fxu.event.api.ViewEventCallback;
 
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;

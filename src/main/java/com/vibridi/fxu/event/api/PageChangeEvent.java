@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.api;
+package com.vibridi.fxu.event.api;
 
 import javafx.event.Event;
 import javafx.event.EventType;

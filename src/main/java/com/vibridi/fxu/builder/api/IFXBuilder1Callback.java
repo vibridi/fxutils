@@ -1,6 +1,6 @@
-package com.vibridi.fxmlutils.api;
+package com.vibridi.fxu.builder.api;
 
-import com.vibridi.fxmlutils.functional.ViewEventCallback;
+import com.vibridi.fxu.event.api.ViewEventCallback;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;

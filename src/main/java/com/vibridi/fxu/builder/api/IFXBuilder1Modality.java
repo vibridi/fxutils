@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.api;
+package com.vibridi.fxu.builder.api;
 
 import javafx.stage.Modality;
 

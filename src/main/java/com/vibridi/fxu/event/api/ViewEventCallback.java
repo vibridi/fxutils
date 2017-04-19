@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.functional;
+package com.vibridi.fxu.event.api;
 
 @FunctionalInterface
 public interface ViewEventCallback<T> {

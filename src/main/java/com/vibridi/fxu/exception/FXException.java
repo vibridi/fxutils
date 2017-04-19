@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.exception;
+package com.vibridi.fxu.exception;
 
 public class FXException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

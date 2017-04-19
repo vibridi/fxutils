@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.functional;
+package com.vibridi.fxu.dialog.api;
 
 @FunctionalInterface
 public interface DialogConfirmationCallback {

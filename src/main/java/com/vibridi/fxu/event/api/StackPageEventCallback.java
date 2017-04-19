@@ -1,4 +1,4 @@
-package com.vibridi.fxmlutils.functional;
+package com.vibridi.fxu.event.api;
 
 public interface StackPageEventCallback {
 	public void processEvent();

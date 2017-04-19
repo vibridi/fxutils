@@ -1,15 +1,15 @@
-package com.vibridi.fxmlutils;
+package com.vibridi.fxu.builder;
 
 import java.io.IOException;
 import java.net.URL;
 
-import com.vibridi.fxmlutils.api.IFXBuilder;
-import com.vibridi.fxmlutils.api.IFXBuilder1;
-import com.vibridi.fxmlutils.api.IFXBuilder1_1;
-import com.vibridi.fxmlutils.api.IFXBuilderFinalStage;
-import com.vibridi.fxmlutils.controller.BaseController;
-import com.vibridi.fxmlutils.exception.FXException;
-import com.vibridi.fxmlutils.functional.ViewEventCallback;
+import com.vibridi.fxu.builder.api.IFXBuilder;
+import com.vibridi.fxu.builder.api.IFXBuilder1;
+import com.vibridi.fxu.builder.api.IFXBuilder1_1;
+import com.vibridi.fxu.builder.api.IFXBuilderFinalStage;
+import com.vibridi.fxu.controller.BaseController;
+import com.vibridi.fxu.event.api.ViewEventCallback;
+import com.vibridi.fxu.exception.FXException;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +18,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FXBuilder implements IFXBuilder {
+	
+	/**
+	 * 	 
+	 * @param clazz Class relative to which the <code>.fxml</code> file is found
+	 * @param fxml Path to the <code>.fxml</code> file
+	 * @return Instance of <code>FXMLBuilder</code>
+	 */
+	public static FXBuilder newView(Class<?> clazz, String fxml) {		
+		return newView(clazz.getResource(fxml));
+	}
+	
+	public static FXBuilder newView(URL url) {
+		return new FXBuilder(url);
+	}
 	
 	private FXMLLoader loader;
 	
