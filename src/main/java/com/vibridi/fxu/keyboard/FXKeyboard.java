@@ -17,7 +17,13 @@ import javafx.scene.input.KeyCombination.Modifier;
 public class FXKeyboard {
 	/**
 	 * Convenience method for setting key combination shortcuts.
-	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus letters or digits.
+	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus one of the following:
+	 * <ul>
+	 * <li>letter [A-Z], case insensitive</li>
+	 * <li>digit [0-9]</li>
+	 * <li>backspace, space</li>
+	 * <li>&, ^, *, \, !, +</li>
+	 * </ul>
 	 * 
 	 * @param scene The node that will respond to the key combination
 	 * @param keyCombination A string in the format 'modifier[+modifier]+key'
@@ -56,11 +62,35 @@ public class FXKeyboard {
 				return KeyCode.valueOf(name);
 			if(Character.isDigit(name.charAt(0)))
 				return KeyCode.valueOf("DIGIT" + name);
-//			switch(name.charAt(0)) {
-//			
-//			}
+			
+			switch(name.charAt(0)) {
+			case '&':
+				return KeyCode.AMPERSAND;
+			case '*':
+				return KeyCode.ASTERISK;
+			case '^':
+				return KeyCode.CIRCUMFLEX;
+			case '!':
+				return KeyCode.EXCLAMATION_MARK;
+			case '\\':
+				return KeyCode.BACK_SLASH;
+			case '+':
+				return KeyCode.PLUS;
+			}
+			
+			throw new IllegalArgumentException("Unknown or unsupported key: " + name);
 		}
-		throw new IllegalArgumentException("Unknown or unsupported key");
+		
+		switch(name) {
+		case "BACKSPACE":
+			return KeyCode.BACK_SPACE;
+		case "SPACE":
+		case "SPACEBAR":
+			return KeyCode.SPACE;
+			
+		default:
+			return KeyCode.valueOf(name);
+		}
 	}
 	
 	private static Modifier asKeyCombinationModifier(String name) {
