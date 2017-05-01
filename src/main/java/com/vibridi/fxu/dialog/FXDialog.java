@@ -119,6 +119,10 @@ public class FXDialog {
 		Files.write(Paths.get(dest.toURI()), bytes);
 	}
 	
+	public static File saveFile(Stage owner, String... extensions) throws IOException {
+		return createFileChooser("Save file", extensions).showSaveDialog(owner);
+	}
+	
 	/**
 	 * 
 	 * @param owner The node owner of the search dialog
