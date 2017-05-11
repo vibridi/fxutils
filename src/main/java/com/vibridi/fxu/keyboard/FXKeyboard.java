@@ -15,6 +15,38 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCombination.Modifier;
 
 public class FXKeyboard {
+	
+	/**
+	 * Convenience method for building {@link KeyCombination} objects from a string descriptor.
+	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus one of the following:
+	 * <ul>
+	 * <li>letter [A-Z], case insensitive</li>
+	 * <li>digit [0-9]</li>
+	 * <li>backspace, space</li>
+	 * <li>&, ^, *, \, !, +</li>
+	 * </ul>
+	 * 
+	 * @param keyCombination
+	 * @return
+	 */
+	public static KeyCombination buildKeyCombination(String keyCombination) {
+		keyCombination = keyCombination.toLowerCase();
+		List<String> keys = Arrays.asList(keyCombination.split("\\+"));
+		if(keys.size() < 1)
+			throw new IllegalArgumentException("Key combination is empty");
+		
+		String stringCode = keys.get(keys.size() - 1);
+		KeyCode keyCode = asKeyCombinationMain(stringCode);
+		
+		List<Modifier> modifiers = keys.stream()
+				.limit(keys.size() - 1)
+				.distinct()
+				.map(FXKeyboard::asKeyCombinationModifier)
+				.collect(Collectors.toList());	
+		
+		return new KeyCodeCombination(keyCode, modifiers.toArray(new Modifier[modifiers.size()]));
+	}
+	
 	/**
 	 * Convenience method for setting key combination shortcuts.
 	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus one of the following:
@@ -30,21 +62,7 @@ public class FXKeyboard {
 	 * @param keyHandler
 	 */
 	public static void setKeyCombinationShortcut(Node node, String keyCombination, EventHandler<? super KeyEvent> keyHandler) {
-		keyCombination = keyCombination.toLowerCase();
-		List<String> keys = Arrays.asList(keyCombination.split("\\+"));
-		if(keys.size() < 1)
-			throw new IllegalArgumentException("Key combination is empty");
-		
-		String stringCode = keys.get(keys.size() - 1);
-		KeyCode keyCode = asKeyCombinationMain(stringCode);
-		
-		List<Modifier> modifiers = keys.stream()
-				.limit(keys.size() - 1)
-				.distinct()
-				.map(FXKeyboard::asKeyCombinationModifier)
-				.collect(Collectors.toList());	
-		
-		final KeyCombination combo = new KeyCodeCombination(keyCode, modifiers.toArray(new Modifier[modifiers.size()]));
+		final KeyCombination combo = buildKeyCombination(keyCombination);
 		
 		node.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
 			if(combo.match(event))
