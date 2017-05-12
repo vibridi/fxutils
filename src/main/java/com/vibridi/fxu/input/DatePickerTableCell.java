@@ -43,7 +43,8 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
     }
     
 
-    @Override public void startEdit() {
+    @Override 
+    public void startEdit() {
         if (!isEditable() 
                 || !getTableView().isEditable() 
                 || !getTableColumn().isEditable()) {
@@ -65,7 +66,7 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
     @Override
     public void cancelEdit() {
         super.cancelEdit();        
-        setText(getDate().toString());	// sets the current DatePicker value as the field text 
+        setText(getItem() == null ? "" : getItem());
         setGraphic(null);
     }
 
@@ -84,7 +85,7 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
                 setText(null);
                 setGraphic(datePicker);
             } else {
-                setText(item);
+                setText(getItem() == null ? "" : getItem());
                 setGraphic(null);
             }
         }
@@ -95,9 +96,9 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
         FXInput.setDateFormat(datePicker, datePattern);
        // datePicker.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
         datePicker.setOnKeyReleased(keyEvent -> {
-        	if (keyEvent.getCode() == KeyCode.ENTER) {
+        	if(keyEvent.getCode() == KeyCode.ENTER) {
         		commitEdit(datePicker.getValue().format(dateFormatter));
-        	} else if (keyEvent.getCode() == KeyCode.ESCAPE) {
+        	} else if(keyEvent.getCode() == KeyCode.ESCAPE) {
         		cancelEdit();
         	}
         });
@@ -109,7 +110,7 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
      * @return
      */
     private LocalDate getDate() {
-        return getItem() == null ? null : LocalDate.parse(getItem(), dateFormatter);
+        return getItem() == null ? LocalDate.now() : LocalDate.parse(getItem(), dateFormatter);
     }
 }
 
