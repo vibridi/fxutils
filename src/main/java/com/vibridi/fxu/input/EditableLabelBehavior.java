@@ -27,8 +27,8 @@ public class EditableLabelBehavior extends TextFieldBehavior {
 		// Register listeners and events
 		editableLabel.setOnMouseClicked(this::handleMouseClicked);
 		editableLabel.setOnKeyPressed(this::handleKeyPressed);
-		editableLabel.focusedProperty().addListener( (observable, oldValue, newValue) -> handleFocusChange(newValue));
-		editableLabel.focusTraversableProperty().addListener( (observable, oldValue, newValue) -> handleFocusTraversableChange(newValue));
+		editableLabel.focusedProperty().addListener((observable, oldValue, newValue) -> handleFocusChange(newValue));
+		editableLabel.focusTraversableProperty().addListener((observable, oldValue, newValue) -> handleFocusTraversableChange(newValue));
 	}
 
 	/************************************************************************
@@ -54,7 +54,7 @@ public class EditableLabelBehavior extends TextFieldBehavior {
 	}
 
 	private void handleMouseClicked(MouseEvent event) {
-		if ( event.getClickCount() == editableLabel.getEditableClicks() && !this.isEditing()) {
+		if (event.getClickCount() == editableLabel.getEditableClicks() && !this.isEditing()) {
 			enterEditableMode();
 		}
 	}

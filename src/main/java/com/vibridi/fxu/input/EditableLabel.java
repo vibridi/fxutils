@@ -1,6 +1,9 @@
 package com.vibridi.fxu.input;
 
+import java.net.URISyntaxException;
 import java.net.URL;
+
+import com.vibridi.fxu.FXUtils;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -48,17 +51,6 @@ public class EditableLabel extends TextField {
 		return new EditableLabelSkin(this); 
 	}
 
-	@Override
-	public String getUserAgentStylesheet() {
-		URL pathToCSS = EditableLabel.class.getResource("../css/editablelabel.css");
-		if ( pathToCSS != null ) {
-			return pathToCSS.toExternalForm();
-		} else {
-			System.err.println("CSS file for EditableLabel could not be found.");
-			return null;
-		}
-	}
-
 	/*********************************************
 	 *                                           *
 	 * FX PROPERTIES		                     *
@@ -94,7 +86,9 @@ public class EditableLabel extends TextField {
 		return baseText; 
 	}
 
-	public void setBaseText(String baseText) { 
+	public void setBaseText(String baseText) {
+		if(baseText == null || baseText.isEmpty())
+			baseText = "(Empty)";
 		this.baseText.set(baseText); 
 	}
 

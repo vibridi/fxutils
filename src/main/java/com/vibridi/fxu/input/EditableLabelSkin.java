@@ -48,13 +48,8 @@ public class EditableLabelSkin extends TextFieldSkin {
     }
 
     /************************************************************************
-     * @}                                                                   *
-     *                                                                      *
-     * \defgroup ControlStateChanges                                        *
      * Handles visual changes on state change that are not or cannot be     *
      * handled via css                                                      *
-     *                                                                      *
-     * @{                                                                   *
      ***********************************************************************/
 
     /**
