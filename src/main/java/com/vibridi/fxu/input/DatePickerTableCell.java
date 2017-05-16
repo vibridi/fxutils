@@ -97,10 +97,15 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
        // datePicker.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
         datePicker.setOnKeyReleased(keyEvent -> {
         	if(keyEvent.getCode() == KeyCode.ENTER) {
-        		commitEdit(datePicker.getValue().format(dateFormatter));
+        		commitEdit(datePicker.getValue().format(dateFormatter)); // TODO check for empty/null values
         	} else if(keyEvent.getCode() == KeyCode.ESCAPE) {
         		cancelEdit();
         	}
+        });
+        
+        datePicker.focusedProperty().addListener((obsValue, oldValue, newValue) -> {
+        	if(oldValue == true && newValue == false)
+        		commitEdit(datePicker.getValue().format(dateFormatter));
         });
     }
 
