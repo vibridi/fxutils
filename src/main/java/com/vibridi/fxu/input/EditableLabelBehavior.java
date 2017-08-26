@@ -31,14 +31,6 @@ public class EditableLabelBehavior extends TextFieldBehavior {
 		editableLabel.focusTraversableProperty().addListener((observable, oldValue, newValue) -> handleFocusTraversableChange(newValue));
 	}
 
-	/************************************************************************
-	 * @}                                                                   *
-	 *                                                                      *
-	 * \defgroup BehaviorMethods                                            *
-	 *                                                                      *
-	 * @{                                                                   *
-	 ***********************************************************************/
-
 	private void handleKeyPressed(KeyEvent event) {
 		switch (event.getCode()) {
 		case ENTER:

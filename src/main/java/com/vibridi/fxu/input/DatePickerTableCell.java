@@ -7,26 +7,26 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.util.Callback;
 
 /**
- * 
- * @author gabriele.vaccari
+ * Provides a date picker implementation of a {@link TableCell}. When cell editing begins, this shows 
+ * a date picker instead of a normal text field. 
  *
- * @param <S> - The type of the TableView generic type (i.e. S == TableView&lt;S&gt;). This should also match with the first generic type in TableColumn.
+ * @param <S> - The type of the TableView generic type (TableView&lt;S&gt;). 
+ * This should also match the first generic type in TableColumn (TableColumn&lt;S,T&gt;).
  */
 public class DatePickerTableCell<S> extends TableCell<S,String> {
 
     /**
-     * Provides a {@link TextField} that allows editing of the cell content when
-     * the cell is double-clicked, or when {@link TableView#edit} is called. 
-     * This method will work  on <code>String</code> {@link TableColumn} instances.
+     * Provides a table cell containing a date picker that show up when the cell is double-clicked 
+     * or {@link TableView#edit} is called. The callback works on string-type {@link TableColumn} instances.
      * 
-     * @return A {@link Callback} that can be inserted into the 
-     *      {@link TableColumn#cellFactoryProperty() cell factory property} of a 
-     *      TableColumn, that enables textual editing of the content.
+     * @param datePattern The date pattern format used to parse the content of this cell
+     * @return A {@link Callback} for a {@link TableColumn#cellFactoryProperty} of a TableColumn, that 
+     * will allow editing the content with a DatePicker widget.
+     * @param <S> Type of the TableColumn
      */
     public static <S> Callback<TableColumn<S,String>, TableCell<S,String>> forTableColumn(String datePattern) {
     	return (TableColumn<S,String> col) -> { return new DatePickerTableCell<S>(datePattern); };
@@ -112,7 +112,7 @@ public class DatePickerTableCell<S> extends TableCell<S,String> {
     /**
      * Transforms the current <code>String</code> value of this table cell in a <code>LocalDate</code> 
      * 
-     * @return
+     * @return The LocalDate representation of the cell value.
      */
     private LocalDate getDate() {
         return getItem() == null ? LocalDate.now() : LocalDate.parse(getItem(), dateFormatter);

@@ -17,13 +17,31 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Provides a build pipeline for JavaFX views. The methods are chainable and enforce a basic call order.
+ * It is assumed that your .fxml resources are found in the class path of your application.
+ * 
+ * Example usage:
+ * 
+ * <pre>
+ * FXBuilder.newView(myClazz, "view/MainView.fxml")
+ * 		.makeStage("New Stage")
+ * 		.setupWith(param1, param2)
+ * 		.addCallback(String.class, this::stringCallback)
+ *	 	.addCallback(MyTriggerClass.class, this::myCallback)
+ * 		.setModality(Modality.WINDOW_MODAL)
+ * 		.build()
+ * 		.show();
+ * </pre>
+ *
+ */
 public class FXBuilder implements IFXBuilder {
 	
 	/**
 	 * 	 
 	 * @param clazz Class relative to which the <code>.fxml</code> file is found
-	 * @param fxml Path to the <code>.fxml</code> file
-	 * @return Instance of <code>FXMLBuilder</code>
+	 * @param fxml Location of the <code>.fxml</code> file
+	 * @return Instance of <code>FXBuilder</code>
 	 */
 	public static FXBuilder newView(Class<?> clazz, String fxml) {		
 		return newView(clazz.getResource(fxml));

@@ -4,30 +4,33 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.vibridi.fxu.FXUtils;
-
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCombination.Modifier;
+import javafx.scene.input.KeyEvent;
 
 public class FXKeyboard {
 	
+	/*********************************************
+	 *                                           *
+	 * PUBLIC METHODS		                     *
+	 *                                           *
+	 *********************************************/
 	/**
 	 * Convenience method for building {@link KeyCombination} objects from a string descriptor.
-	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus one of the following:
+	 * Supports any combination of Ctrl (or Mac Command), Alt, Shift plus one of the following:
 	 * <ul>
 	 * <li>letter [A-Z], case insensitive</li>
 	 * <li>digit [0-9]</li>
 	 * <li>backspace, space</li>
-	 * <li>&, ^, *, \, !, +</li>
+	 * <li>&amp;, ^, *, \, !, +</li>
 	 * </ul>
 	 * 
-	 * @param keyCombination
-	 * @return
+	 * @param keyCombination A string representing a key combination
+	 * @return A JavaFX <code>KeyCombination</code> object
 	 */
 	public static KeyCombination buildKeyCombination(String keyCombination) {
 		keyCombination = keyCombination.toLowerCase();
@@ -49,17 +52,17 @@ public class FXKeyboard {
 	
 	/**
 	 * Convenience method for setting key combination shortcuts.
-	 * Supports any combination of Ctrl (Command on Mac), Alt, Shift plus one of the following:
+	 * Supports any combination of Ctrl (Command), Alt, Shift plus one of the following:
 	 * <ul>
 	 * <li>letter [A-Z], case insensitive</li>
 	 * <li>digit [0-9]</li>
 	 * <li>backspace, space</li>
-	 * <li>&, ^, *, \, !, +</li>
+	 * <li>&amp;, ^, *, \, !, +</li>
 	 * </ul>
 	 * 
-	 * @param scene The node that will respond to the key combination
+	 * @param node The node that will respond to the key combination
 	 * @param keyCombination A string in the format 'modifier[+modifier]+key'
-	 * @param keyHandler
+	 * @param keyHandler The function called when the key combo is detected
 	 */
 	public static void setKeyCombinationShortcut(Node node, String keyCombination, EventHandler<? super KeyEvent> keyHandler) {
 		final KeyCombination combo = buildKeyCombination(keyCombination);
@@ -70,6 +73,16 @@ public class FXKeyboard {
 		});
 	}
 	
+	/*********************************************
+	 *                                           *
+	 * PRIVATE METHODS		                     *
+	 *                                           *
+	 *********************************************/
+	/**
+	 * Converts the textual representation of a key into a JavaFX {@link KeyCode}
+	 * @param name Key string
+	 * @return JavaFX <code>KeyCode</code> object
+	 */
 	private static KeyCode asKeyCombinationMain(String name) {
 		if(name == null || name.isEmpty())
 			throw new IllegalArgumentException("Key definition is null or empty");
@@ -111,6 +124,12 @@ public class FXKeyboard {
 		}
 	}
 	
+	/**
+	 * Converts the textual representation of a key modifier into a JavaFX {@link Modifier}. 
+	 * Supports CTRL, CMD, ALT, SHIFT
+	 * @param name Modifier string
+	 * @return JavaFX <code>Modifier</code> object
+	 */
 	private static Modifier asKeyCombinationModifier(String name) {
 		switch(name.toUpperCase()) {
 		case "CTRL":

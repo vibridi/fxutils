@@ -21,8 +21,8 @@ public class FXUtils {
 	/**
 	 * Sets a mouse-over tooltip on the specified node.
 	 * 
-	 * @param node Node that has to show the tip
-	 * @param text Informative content of the tip
+	 * @param node Node that shows the tooltip when hovered
+	 * @param text Text content of the tooltip
 	 */
 	public static void setTooltip(Node node, String text) {
 		Tooltip.install(node, new Tooltip(text));

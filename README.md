@@ -24,6 +24,7 @@ Make sure to use FXUtils with Java 8. It won't work on older versions of the JVM
 - **fxu.event.***: utility methods for JavaFX events
 - **fxu.exception**: custom exceptions
 - **fxu.input**: extensions or alternate implementations of common JavaFX controls
+- **fxu.intl**: support for localization / internationalization
 - **fxu.keyboard**: utility methods for JavaFX keyboard-based functionalities
 
 

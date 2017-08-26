@@ -22,6 +22,12 @@ import javafx.scene.control.Tooltip;
 
 public class FXLocalization {
 	
+	/**
+	 * Converts BCP 47 tags into {@link Locale} objects.
+	 * 
+	 * @param supportedLocaleTags The tags of the languages that your application supports.
+	 * @return A list of corresponding <code>Locale</code> objects
+	 */
 	public static List<Locale> parseBCP47Tags(String[] supportedLocaleTags) {
 		return Stream.of(supportedLocaleTags)
 				.map(tag -> Locale.forLanguageTag(tag.replace("_", "-")))
@@ -39,6 +45,14 @@ public class FXLocalization {
 		this(parseBCP47Tags(supportedLocaleTags), basePath, classLoader);
 	}
 	
+	/**
+	 * Initializes an FXLocalization object that manages the resource bundle of your app for switching between languages.
+	 * See also {@link ResourceBundle}.
+	 * 
+	 * @param supportedLocales A list of the language locales supported by the client app.
+	 * @param basePath Base path used to load the resource bundles. 
+	 * @param classLoader Class loader used to load the resource bundles.
+	 */
 	public FXLocalization(List<Locale> supportedLocales, String basePath, ClassLoader classLoader) {
 		if(supportedLocales.isEmpty())
 			supportedLocales.add(Locale.getDefault());
@@ -64,10 +78,21 @@ public class FXLocalization {
 		return supportedLocales;
 	}
 	
+	/**
+	 * @return The display names of the supported languages.
+	 */
 	public List<String> getLanguageDisplayNames() {
 		return languageDisplayNames;
 	}
 	
+	/**
+	 * Binds a localizable string to the currently selected locale. When the locale changes, the bound string will be updated 
+	 * in real time with the correct translation.
+	 *  
+	 * @param key The key of the localizable string as found in the resource bundle.
+	 * @param args Additional arguments for the {@link MessageFormat#format} method
+	 * @return A <code>StringBinding</code> object 
+	 */
 	public StringBinding createStringBinding(final String key, final Object... args) {
 		return Bindings.createStringBinding(() -> get(key, args), locale);
 	}
@@ -76,10 +101,19 @@ public class FXLocalization {
 	    return Bindings.createStringBinding(func, locale);
 	}
 	
+	/**
+	 * Switches the current app language to the new one.
+	 * @param locale The <code>Locale</code> object representing the new language.
+	 */
 	public void switchLanguage(Locale locale) {
 		setLocale(locale);
 	}
 	
+	/**
+	 * Switches the current app language to the new one. 
+	 * You might want to call {@link FXLocalization#getLanguageDisplayNames} to get the exact values you can call this method with.
+	 * @param value The display name of the language you want to switch to 
+	 */
 	public void switchLanguage(String value) {
 		setLocale(supportedLocales.get(languageDisplayNames.indexOf(value)));
 	}
@@ -90,6 +124,10 @@ public class FXLocalization {
 	 * FX PROPERTIES		                     *
 	 *                                           *
 	 *********************************************/
+	/**
+	 * Locale property.
+	 * @return Locale property
+	 */
 	public ObjectProperty<Locale> localeProperty() {
 		return locale;
 	}
@@ -108,36 +146,78 @@ public class FXLocalization {
 	 * FACTORY METHODS		                     *
 	 *                                           *
 	 *********************************************/
+	/**
+	 * Binds a labeled node to the given resource to reflect language changes in real time.
+	 * @param node The labeled node
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 */
 	public void bind(Labeled node, String key, Object... args) {
 		node.textProperty().bind(createStringBinding(key, args));
 	}
 	
+	/**
+	 * Binds a labeled node to the given resource to reflect language changes in real time.
+	 * @param node The menu item node
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 */
 	public void bind(MenuItem node, String key, Object... args) {
 		node.textProperty().bind(createStringBinding(key, args));
 	}
 	
+	/**
+	 * Binds a table column to the given resource to reflect language changes in real time.
+	 * @param node The table column
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 */
 	public void bind(TableColumn<?,?> node, String key, Object... args) {
 		node.textProperty().bind(createStringBinding(key, args));
 	}
 	
+	/**
+	 * Builds a localized <code>Label</code>.
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 * @return The localized <code>Label</code> object
+	 */
 	public Label getLabel(String key, Object... args) {
 		Label lbl = new Label();
 		lbl.textProperty().bind(createStringBinding(key, args));
 		return lbl;
 	}
 	
+	/**
+	 * Builds a localized <code>Button</code>.
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 * @return The localized <code>Button</code>
+	 */
 	public Button getButton(String key, Object... args) {
 		Button btn = new Button();
 		btn.textProperty().bind(createStringBinding(key, args));
 		return btn;
 	}
 	
+	/**
+	 * Sets a localized tooltip on the given node.
+	 * @param node Node that will show the localized tooltip
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 */
 	public void setTooltip(Node node, String key, Object... args) {
 		Tooltip tooltip = new Tooltip();
 	    tooltip.textProperty().bind(createStringBinding(key, args));
 	    Tooltip.install(node, tooltip);
 	}
 	
+	/**
+	 * Returns the resource corresponding to the given resource in the current locale.
+	 * @param key The resource key
+	 * @param args Optional arguments
+	 * @return The resource in the given locale. 
+	 */
 	public String get(final String key, final Object... args) {
 		ResourceBundle bundle = ResourceBundle.getBundle(basePath, getLocale(), classLoader);
 		return MessageFormat.format(bundle.getString(key), args);

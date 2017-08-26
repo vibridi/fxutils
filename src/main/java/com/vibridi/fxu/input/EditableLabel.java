@@ -1,10 +1,5 @@
 package com.vibridi.fxu.input;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import com.vibridi.fxu.FXUtils;
-
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,8 +13,8 @@ import javafx.scene.control.TextField;
  * It acts as a Label, by removing the TextField style and making it non-editable.
  * It is also not focus traversable.
  *
- * When clicking on it, it will switch to editable mode
- * Changing focus away from the EditableLabel or pressing ENTER will save the changes made and deactivate editable mode.
+ * When clicking on it, it will switch to editable mode.
+ * Changing focus away from the EditableLabel or pressing ENTER will save the changes and deactivate editable mode.
  * When pressing ESC it will exit editable mode without saving the changes made.
  *
  * Credit: R. J. Westman https://github.com/rjwestman/JavaFX_EditableLabel
@@ -57,7 +52,8 @@ public class EditableLabel extends TextField {
 	 *                                           *
 	 *********************************************/
 	/**
-	 * Clicks needed to enter editable-mode
+	 * Clicks needed to enter editable-mode.
+	 * @return Number of clicks
 	 */
 	public int getEditableClicks() { 
 		return editableClicks.get(); 
@@ -72,11 +68,12 @@ public class EditableLabel extends TextField {
 	}
 
 	/**
-	 * This saves the text that is to be displayed
+	 * This saves the text that is going to be displayed.
 	 *
 	 * Since we can't override the final set/get methods of the super class, we need to use this
 	 * to set the text that is to be displayed.
 	 * Since the displayed text can be a truncated base text we need to save the base in it's own property.
+	 * @return Text to be displayed
 	 */
 	public String getBaseText() { 
 		return baseText.get(); 

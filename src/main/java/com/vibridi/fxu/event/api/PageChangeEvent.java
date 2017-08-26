@@ -3,6 +3,10 @@ package com.vibridi.fxu.event.api;
 import javafx.event.Event;
 import javafx.event.EventType;
 
+/**
+ * Defines a custom event for page changes in paged widgets (e.g. StackedPane) 
+ *
+ */
 public class PageChangeEvent extends Event {
 	private static final long serialVersionUID = 1L;
 	
