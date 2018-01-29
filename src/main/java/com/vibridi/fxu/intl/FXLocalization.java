@@ -85,6 +85,10 @@ public class FXLocalization {
 		return languageDisplayNames;
 	}
 	
+	public String getCurrentLanguage() {
+		return getLocale().getDisplayLanguage(getLocale()).toUpperCase();
+	}
+	
 	/**
 	 * Binds a localizable string to the currently selected locale. When the locale changes, the bound string will be updated 
 	 * in real time with the correct translation.

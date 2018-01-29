@@ -25,7 +25,7 @@ public class FXKeyboard {
 	 * <ul>
 	 * <li>letter [A-Z], case insensitive</li>
 	 * <li>digit [0-9]</li>
-	 * <li>backspace, space</li>
+	 * <li>backspace, space, enter</li>
 	 * <li>&amp;, ^, *, \, !, +</li>
 	 * </ul>
 	 * 
@@ -56,7 +56,7 @@ public class FXKeyboard {
 	 * <ul>
 	 * <li>letter [A-Z], case insensitive</li>
 	 * <li>digit [0-9]</li>
-	 * <li>backspace, space</li>
+	 * <li>backspace, space, enter</li>
 	 * <li>&amp;, ^, *, \, !, +</li>
 	 * </ul>
 	 * 
@@ -118,6 +118,9 @@ public class FXKeyboard {
 		case "SPACE":
 		case "SPACEBAR":
 			return KeyCode.SPACE;
+			
+		case "ENTER":
+			return KeyCode.ENTER;
 			
 		default:
 			return KeyCode.valueOf(name);
