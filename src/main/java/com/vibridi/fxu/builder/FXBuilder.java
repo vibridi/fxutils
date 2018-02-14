@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 /**
  * Provides a build pipeline for JavaFX views. The methods are chainable and enforce a basic call order.
- * It is assumed that your .fxml resources are found in the class path of your application.
+ * It assumes that your .fxml resources are found in the class path of your application.
  * 
  * Example usage:
  * 
