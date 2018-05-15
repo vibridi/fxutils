@@ -12,7 +12,10 @@ import com.vibridi.fxu.event.api.ViewEventCallback;
 import com.vibridi.fxu.exception.FXException;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,6 +52,32 @@ public class FXBuilder implements IFXBuilder {
 	
 	public static FXBuilder newView(URL url) {
 		return new FXBuilder(url);
+	}
+	
+	public static void justShow(Node n) {
+		BorderPane bp = new BorderPane();
+		bp.setCenter(n);
+		justShow(bp);
+	}
+	
+	public static void justShow(Node n, Double topAnchor, Double rightAnchor, Double bottomAnchor, Double leftAnchor) {
+		BorderPane bp = new BorderPane();
+		AnchorPane ap = new AnchorPane();
+		bp.setCenter(ap);
+		AnchorPane.setTopAnchor(n, topAnchor);
+		AnchorPane.setRightAnchor(n, rightAnchor);
+		AnchorPane.setBottomAnchor(n, bottomAnchor);
+		AnchorPane.setLeftAnchor(n, leftAnchor);
+		ap.getChildren().add(n);
+		justShow(bp);
+	}
+	
+	private static void justShow(Pane p) {
+		p.setPrefSize(300, 150);
+		Stage stage = new Stage();
+		stage.setTitle("Just showing");
+		stage.setScene(new Scene(p));
+		stage.show();
 	}
 	
 	private FXMLLoader loader;
